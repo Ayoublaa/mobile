@@ -45,17 +45,17 @@ graph TD
 
 | Dashboard Overview | Anomaly Analytics |
 |:---:|:---:|
-| <img src="figures/dashboard.png" width="400" /> | <img src="figures/graphs.png" width="400" /> |
+| <img src="screenshot/dashboard.png" width="400" /> | <img src="screenshot/graphs.png" width="400" /> |
 | *Real-time visibility of system health.* | *Visualizing anomaly scores and patterns.* |
 
 | Log Ingestion | Alert Journal |
 |:---:|:---:|
-| <img src="figures/importlog.png" width="400" /> | <img src="figures/jouranldaletre.png" width="400" /> |
+| <img src="screenshot/importlog.png" width="400" /> | <img src="screenshot/jouranldaletre.png" width="400" /> |
 | *Seamless drag-and-drop log analysis.* | *Complete history of security incidents.* |
 
 | Email Notifications | Security Recommendations |
 |:---:|:---:|
-| <img src="figures/email.png" width="400" /> | <img src="figures/recommendation.png" width="400" /> |
+| <img src="screenshot/email.png" width="400" /> | <img src="screenshot/recommendation.png" width="400" /> |
 | *Immediate alerts for critical threats.* | *Actionable AI-driven mitigation steps.* |
 
 ---
