@@ -12,7 +12,16 @@ An advanced, **Active-Security Platform** designed to detect and mitigate API ab
 ## 🏗️ System Architecture
 The platform utilizes a modern decoupled architecture to ensure low-latency analysis and real-time response.
 
-![Architecture Diagram](figures/architecture.png)
+```mermaid
+graph TD
+    A[Mobile App / Client] -->|JSON Logs| B[FastAPI Backend]
+    B -->|Async Task| C[Isolation Forest Engine]
+    C -->|Store Results| D[(SQLite Database)]
+    B -->|WebSocket| E[React Dashboard]
+    D -->|Audit Logs| E
+    C -->|Trigger| F[Email Alerts]
+```
+
 
 ### Key Components:
 - **FastAPI Backend**: Handles asynchronous log parsing and ML inference.
@@ -36,20 +45,21 @@ The platform utilizes a modern decoupled architecture to ensure low-latency anal
 
 | Dashboard Overview | Anomaly Analytics |
 |:---:|:---:|
-| ![Dashboard](figures/dashboard.png) | ![Graphs](figures/graphs.png) |
+| <img src="figures/dashboard.png" width="400" /> | <img src="figures/graphs.png" width="400" /> |
 | *Real-time visibility of system health.* | *Visualizing anomaly scores and patterns.* |
 
 | Log Ingestion | Alert Journal |
 |:---:|:---:|
-| ![Import](figures/importlog.png) | ![Journal](figures/jouranldaletre.png) |
+| <img src="figures/importlog.png" width="400" /> | <img src="figures/jouranldaletre.png" width="400" /> |
 | *Seamless drag-and-drop log analysis.* | *Complete history of security incidents.* |
 
 | Email Notifications | Security Recommendations |
 |:---:|:---:|
-| ![Email](figures/email.png) | ![Recommendations](figures/recommendation.png) |
+| <img src="figures/email.png" width="400" /> | <img src="figures/recommendation.png" width="400" /> |
 | *Immediate alerts for critical threats.* | *Actionable AI-driven mitigation steps.* |
 
 ---
+
 
 ## 🛠️ Installation & Setup
 
