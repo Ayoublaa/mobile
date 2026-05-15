@@ -302,7 +302,15 @@ Topics covered: anomaly detection methodology, feature engineering, evaluation m
 
 <div align="center">
 
-**Built with ❤️ for the DevSecOps Community**
+**Built with 
+
+https://github.com/user-attachments/assets/a0ef8412-9516-44cb-a6cd-862d3c5fb53d
+
+
+
+
+
+for the DevSecOps Community**
 
 *If this project helped you, consider giving it a ⭐*
 
