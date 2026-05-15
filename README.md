@@ -45,7 +45,8 @@ graph TD
 
 | Dashboard Overview | Anomaly Analytics |
 |:---:|:---:|
-| <img src="scrennshot/dashboard.png" width="400" /> | <img src="scrennshot/graphs.png" width="400" /> |
+| <img src="scrennshot/dashboard.png" width="400" /><img width="808" height="442" alt="dashboard" src="https://github.com/user-attachments/assets/ddd56827-7369-4dcb-b764-2d69eac84a6b" />
+ | <img src="scrennshot/graphs.png" width="400" /> |
 | *Real-time visibility of system health.* | *Visualizing anomaly scores and patterns.* |
 
 | Log Ingestion | Alert Journal |
