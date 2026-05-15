@@ -1,60 +1,114 @@
-# Mobile API Misuse Detector
+# 🛡️ Mobile API Misuse Detector
 
-## Overview
-This open‑source project provides a **real‑time active‑security platform** for detecting abuse of mobile backend APIs. It combines:
-- FastAPI backend with asynchronous processing
-- Isolation‑Forest unsupervised anomaly detection
-- A premium React dashboard with glass‑morphism UI
-- Persistent SQLite storage for logs, alerts and configurable settings
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg?style=flat&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB.svg?style=flat&logo=React&logoColor=black)](https://reactjs.org/)
+[![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn-F7931E.svg?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 
-The system can ingest Nginx, Express or Spring logs, automatically flag spikes, bruteforce attempts, endpoint enumeration and more.
+An advanced, **Active-Security Platform** designed to detect and mitigate API abuse in mobile environments using unsupervised Machine Learning.
 
-## Screenshots
-Below are the key UI screens and diagrams that illustrate the architecture and workflow of the detector:
+---
 
-![Architecture diagram](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/architecture.png)
+## 🏗️ System Architecture
+The platform utilizes a modern decoupled architecture to ensure low-latency analysis and real-time response.
 
-![Workflow diagram](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/workflow.png)
+![Architecture Diagram](figures/architecture.png)
 
-![Dashboard view](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/dashboard.png)
+### Key Components:
+- **FastAPI Backend**: Handles asynchronous log parsing and ML inference.
+- **Isolation Forest Engine**: Detects zero-day anomalies without predefined signatures.
+- **Persistent Storage**: SQLite database for audit trails, alert history, and dynamic settings.
+- **Glassmorphism UI**: A premium React dashboard for real-time monitoring.
 
-![Email alert template](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/email.png)
+---
 
-![Anomaly graphs](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/graphs.png)
+## ✨ Key Features
+- **🚀 Real-time Ingestion**: Support for Nginx, Express, and Spring log formats.
+- **🤖 AI-Powered Detection**: Unsupervised anomaly detection using `IsolationForest`.
+- **📊 Behavioral Clustering**: Groups suspicious IPs by attack patterns (Bruteforce, Scrapers, Spikes).
+- **🔔 Active Alerting**: Automated Email/Webhook notifications via background tasks.
+- **⚙️ Dynamic Thresholds**: Adjust sensitivity on-the-fly via the administrative dashboard.
+- **📜 Audit Logs**: Full persistence of every alert and system setting change.
 
-![Log import screen](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/importlog.png)
+---
 
-![Journal of persisted alerts](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/jouranldaletre.png)
+## 📸 UI Showcase
 
-![Recommendation panel](file:///c:/Users/Windows/Desktop/mobile-api-misuse-detector/figures/recommendation.png)
+| Dashboard Overview | Anomaly Analytics |
+|:---:|:---:|
+| ![Dashboard](figures/dashboard.png) | ![Graphs](figures/graphs.png) |
+| *Real-time visibility of system health.* | *Visualizing anomaly scores and patterns.* |
 
-## Quick start
+| Log Ingestion | Alert Journal |
+|:---:|:---:|
+| ![Import](figures/importlog.png) | ![Journal](figures/jouranldaletre.png) |
+| *Seamless drag-and-drop log analysis.* | *Complete history of security incidents.* |
+
+| Email Notifications | Security Recommendations |
+|:---:|:---:|
+| ![Email](figures/email.png) | ![Recommendations](figures/recommendation.png) |
+| *Immediate alerts for critical threats.* | *Actionable AI-driven mitigation steps.* |
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Prerequisites
+- Python 3.9+
+- Node.js 18+
+- SMTP Server (e.g., Gmail) for alerts.
+
+### 2. Backend Setup
 ```bash
-# Clone the repo (once pushed)
-# git clone https://github.com/Ayoublaa/mobile.git
-
-# Backend
 cd backend
 python -m venv .venv
-.\.venv\Scripts\activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn backend.main:app --reload
+```
 
-# Frontend
-cd ../frontend
+### 3. Frontend Setup
+```bash
+cd frontend
 npm install
+```
+
+### 4. Configuration
+Create a `.env` file in the root directory:
+```env
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+EMAIL_FROM=your-email@gmail.com
+EMAIL_TO=admin@example.com
+```
+
+### 5. Run the Application
+**Backend:**
+```bash
+uvicorn backend.main:app --reload
+```
+**Frontend:**
+```bash
 npm run dev
 ```
 
-## Configuration (environment variables)
-| Variable | Description |
-|----------|-------------|
-| `SMTP_USERNAME` | Email account for alerts |
-| `SMTP_PASSWORD` | Password / app‑specific token |
-| `EMAIL_FROM` | Sender address |
-| `EMAIL_TO` | Comma‑separated list of recipients |
-| `SMTP_HOST` | SMTP server (default: smtp.gmail.com) |
-| `SMTP_PORT` | Port (default: 587) |
+---
 
-## License
-MIT – see `LICENSE` for details.
+## 📡 API Endpoints
+- `POST /upload-log`: Ingest and analyze log files.
+- `GET /stats`: Retrieve enriched metrics for the dashboard.
+- `GET /alerts/history`: Access the persistent security audit trail.
+- `POST /settings`: Configure alert thresholds and system state.
+
+---
+
+## 📄 Academic Research
+This project is part of a comprehensive security study. A detailed **14-page scientific report** following the **SoftwareX (Elsevier)** template is available as `report.tex` in the root directory.
+
+---
+
+## 👥 Contributors
+- **Kaoutar Menacera**
+- **Ayoub Laafar**
+
+---
+*Developed with ❤️ for the DevSecOps Community.*
