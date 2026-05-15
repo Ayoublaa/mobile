@@ -133,9 +133,10 @@ https://github.com/Ayoublaa/mobile/assets/YOUR_ASSET_ID/your-demo.mp4
 │                                                     │
 │              🎬  Demo Video                         │
 │                                                     │
-│         [ Coming Soon — Link to be added ]          │
+│               │
 │                                                     │
 └─────────────────────────────────────────────────────┘
+https://github.com/user-attachments/assets/a0ef8412-9516-44cb-a6cd-862d3c5fb53d
 ```
 
 </div>
@@ -304,7 +305,7 @@ Topics covered: anomaly detection methodology, feature engineering, evaluation m
 
 **Built with 
 
-https://github.com/user-attachments/assets/a0ef8412-9516-44cb-a6cd-862d3c5fb53d
+
 
 
 
