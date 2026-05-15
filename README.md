@@ -50,7 +50,7 @@ graph TD
 
 | Log Ingestion | Alert Journal |
 |:---:|:---:|
-| <img src="scrennshot/importlog.png" width="400" /> | <img src="scrennshot/jouranldaletre.png" width="400" /> |
+| <img src="mobile/scrennshot/importlog.png" width="400" /> | <img src="scrennshot/jouranldaletre.png" width="400" /> |
 | *Seamless drag-and-drop log analysis.* | *Complete history of security incidents.* |
 
 | Email Notifications | Security Recommendations |
