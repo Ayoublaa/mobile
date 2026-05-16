@@ -74,6 +74,22 @@ mobile-api-misuse-detector/
 
 Le projet est entièrement conteneurisé via Docker pour une mise en route rapide et reproductible.
 
+**Extrait de notre architecture (`docker-compose.yml`) :**
+```yaml
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+```
+
 ### 1. Cloner le projet
 ```bash
 git clone https://github.com/Ayoublaa/mobile.git
@@ -122,6 +138,26 @@ Le moteur d'intelligence artificielle de notre plateforme repose sur une archite
 | **Clustering Comportemental** | Segmentation des attaquants en profils comportementaux basés sur le taux d'erreur 401, les endpoints touchés, le volume, et l'usage mobile. |
 | **Analyse Heuristique** | Analyse ciblée pour la détection formelle de spikes et d'énumération de routes d'API. |
 | **📱 Analyse du Manifest Android** | Module backend exclusif (`/analyze-manifest`) pour parser les fichiers `AndroidManifest.xml`, détecter les composants exportés, et évaluer le score de risque des permissions dangereuses (ex: `READ_CONTACTS`, `SEND_SMS`). |
+
+**Extrait de notre analyseur statique Android (`backend/manifest_analyzer.py`) :**
+```python
+def analyze(self, xml_content: str) -> Dict[str, object]:
+    root = ET.fromstring(xml_content)
+    dangerous_found = []
+    
+    # 1. Extraction des permissions dangereuses
+    for elem in root.findall('.//uses-permission'):
+        name = elem.attrib.get('{http://schemas.android.com/apk/res/android}name', '')
+        if name in self.DANGEROUS_PERMISSIONS:
+            dangerous_found.append({"permission": name, "risk": "Haute"})
+            
+    # 2. Détection des mauvaises configurations (Debug, Cleartext)
+    app_elem = root.find('.//application')
+    if app_elem is not None and app_elem.attrib.get('{...}debuggable') == 'true':
+        vulnerabilities.append("Configuration Critique: App en mode debuggable")
+        
+    return {"dangerous_permissions": dangerous_found, "risk_score": len(dangerous_found) * 10}
+```
 
 ---
 
@@ -174,9 +210,13 @@ def _score(self, expected: Dict[str, Any], anomalies: List[Anomaly]) -> Dict[str
 
 Voici la vidéo de démonstration complète de la plateforme (du lancement via Docker jusqu'à l'analyse IA et la réception des alertes) :
 
-> ⚠️ *(Placez votre fichier `demo.mp4` ou le lien YouTube ici)*
+
 <div align="center">
-  <video src="https://github.com/user-attachments/assets/votre-video-demo.mp4" width="800" controls="controls"></video>
+  
+
+https://github.com/user-attachments/assets/631d7957-d8b0-40f6-8e5f-d0e18c976bbd
+
+
 </div>
 
 ---
@@ -223,4 +263,4 @@ Ce projet a été développé en tant que solution complète et moderne de cyber
 - **Kaoutar Menacera**
 - **Ayoub Laafar**
 
-📄 *Un rapport de recherche académique complet de 14 pages (format SoftwareX) détaillant l'approche méthodologique et l'implémentation est disponible dans le fichier `report.tex`.*
+📄 *Un rapport de recherche académique complet(format SoftwareX) détaillant l'approche méthodologique et l'implémentation est disponible dans le fichier `report.tex`.*
