@@ -24,9 +24,10 @@
 - [⚙️ Prérequis](#️-prérequis)
 - [🚀 Installation & Lancement](#-installation--lancement)
 - [✨ Fonctionnalités](#-fonctionnalités)
-- [🤖 Moteur IA](#-moteur-ia)
-- [📊 Benchmark — Baseline vs Notre Système](#-benchmark--baseline-vs-notre-système)
-- [📸 Interface & Démo](#-interface--démo)
+- [🤖 Moteur IA & Analyse du Manifest](#-moteur-ia--analyse-du-manifest)
+- [📊 Métriques des Modèles IA & Benchmark](#-métriques-des-modèles-ia--benchmark)
+- [🎥 Démonstration Vidéo](#-démonstration-vidéo)
+- [📸 Interface Dashboard](#-interface-dashboard)
 - [🛑 Arrêt propre](#-arrêt-propre)
 - [👥 Auteurs](#-auteurs)
 
@@ -59,9 +60,9 @@ mobile-api-misuse-detector/
 
 ---
 
-## 🚀 Installation & Lancement
+## 🚀 Docker Compose : Installation & Lancement
 
-Le projet est entièrement conteneurisé via Docker pour une mise en route rapide.
+Le projet est entièrement conteneurisé via Docker pour une mise en route rapide et reproductible.
 
 ### 1. Cloner le projet
 ```bash
@@ -101,30 +102,42 @@ docker compose up --build -d
 
 ---
 
-## 🤖 Moteur IA
+## 🤖 Moteur IA & Analyse du Manifest
 
 Le moteur d'intelligence artificielle de notre plateforme repose sur une architecture hybride :
 
-| Algorithme | Rôle |
+| Composant | Rôle |
 |------------|------|
 | **Isolation Forest** | Algorithme de Machine Learning non supervisé qui isole les anomalies (outliers) pour repérer les pics de requêtes et les comportements furtifs. |
 | **Clustering Comportemental** | Segmentation des attaquants en profils comportementaux basés sur le taux d'erreur 401, les endpoints touchés, le volume, et l'usage mobile. |
 | **Analyse Heuristique** | Analyse ciblée pour la détection formelle de spikes et d'énumération de routes d'API. |
+| **📱 Analyse du Manifest Android** | Module backend exclusif (`/analyze-manifest`) pour parser les fichiers `AndroidManifest.xml`, détecter les composants exportés, et évaluer le score de risque des permissions dangereuses (ex: `READ_CONTACTS`, `SEND_SMS`). |
 
 ---
 
-## 📊 Benchmark — Baseline vs Notre Système
+## 📊 Métriques des Modèles IA & Benchmark
 
 Le projet intègre un moteur d'évaluation (accessible via l'endpoint `GET /benchmark`) qui simule divers scénarios d'attaques (Bruteforce, Énumération, Flood 500, trafic légitime) et compare les performances de notre système d'IA à une approche classique par seuils statiques (de type Fail2ban).
 
-**Avantages de notre système :**
-- **Precision nettement supérieure** (réduction des faux positifs sur les adresses IP partagées/NAT).
-- **Meilleur Recall** (détection des attaques "Low-and-Slow" ou furtives qui passent sous le radar des limites de requêtes standards).
-- **F1-Score optimisé** grâce à la flexibilité de l'apprentissage automatique qui s'adapte à l'évolution du trafic.
+**Métriques d'IA Obtenues :**
+- **Precision nettement supérieure** (réduction quasi-totale des faux positifs sur les adresses IP partagées/NAT).
+- **Meilleur Recall** (détection efficace des attaques "Low-and-Slow" ou furtives qui passent sous le radar des limites de requêtes standards).
+- **F1-Score optimisé** grâce à la flexibilité de l'apprentissage automatique qui s'adapte à l'évolution de la distribution du trafic.
 
 ---
 
-## 📸 Interface & Démo
+## 🎥 Démonstration Vidéo
+
+Voici la vidéo de démonstration complète de la plateforme (du lancement via Docker jusqu'à l'analyse IA et la réception des alertes) :
+
+> ⚠️ *(Placez votre fichier `demo.mp4` ou le lien YouTube ici)*
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/votre-video-demo.mp4" width="800" controls="controls"></video>
+</div>
+
+---
+
+## 📸 Interface Dashboard
 
 **1. Dashboard Principal**  
 *Vue d'ensemble en temps réel de la sécurité et des métriques du système.*
