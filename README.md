@@ -1,485 +1,169 @@
-# Mobile API Misuse Detector
+<div align="center">
 
-An active-security platform for detecting API abuse in mobile applications using unsupervised machine learning.
+<img src="https://img.shields.io/badge/Security-Platform-0A2342?style=for-the-badge&logoColor=white" />
 
-## Overview
+# 🛡️ Mobile API Misuse Detector
 
-Mobile API Misuse Detector is a comprehensive security platform that combines real-time log ingestion, unsupervised anomaly detection (Isolation Forest), and a responsive web interface to automatically identify and alert on anomalous API usage in mobile applications.
+**Plateforme de sécurité active pour la détection en temps réel des abus d'API mobiles, propulsée par le Machine Learning non supervisé.**
 
-**Key Features:**
-- 🚀 Real-time API log analysis and anomaly detection
-- 🤖 Unsupervised machine learning (Isolation Forest algorithm)
-- 📊 Interactive React-based dashboard with WebSocket real-time updates
-- 🔔 Automated email and webhook alerts
-- 💾 Persistent SQLite-based alert history
-- ⚙️ Dynamic threshold management
-- 📈 Sensitivity analysis for robustness assessment
-- 🐳 Docker container support
+<br/>
 
-## Quick Start
+[![License: MIT](https://img.shields.io/badge/License-MIT-0A2342?style=flat-square)](https://opensource.org/licenses/MIT)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB?style=flat-square&logo=React&logoColor=black)](https://reactjs.org/)
+[![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 
-### Prerequisites
-- Python 3.9+
-- Node.js 18+
-- pip and npm package managers
-
-### Installation
-
-#### Step 1: Clone the Repository
-```bash
-git clone https://github.com/kaoutar/mobile-api-misuse-detector.git
-cd mobile-api-misuse-detector
-```
-
-#### Step 2: Backend Setup
-```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-#### Step 3: Frontend Setup
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install dependencies
-npm install
-
-# Return to project root
-cd ..
-```
-
-#### Step 4: Database Setup
-```bash
-# Initialize SQLite database
-python -c "from src.database import init_db; init_db()"
-```
-
-### Running the Application
-
-#### Development Mode
-
-**Terminal 1 - Backend (FastAPI):**
-```bash
-python main.py
-# Server runs at http://localhost:8000
-```
-
-**Terminal 2 - Frontend (React):**
-```bash
-cd frontend
-npm start
-# Application opens at http://localhost:3000
-```
-
-#### Production Mode - Docker
-
-```bash
-# Build Docker image
-docker build -t mobile-api-detector:latest .
-
-# Run container
-docker run -p 8000:8000 -p 3000:3000 \
-  -e DATABASE_URL="sqlite:///./alerts.db" \
-  mobile-api-detector:latest
-```
-
-## Usage
-
-### 1. Upload API Logs
-
-#### Via Web Interface
-1. Open http://localhost:3000
-2. Navigate to "Import Log"
-3. Select a log file (JSON or text format)
-4. Click "Upload and Analyze"
-
-#### Via REST API
-```bash
-curl -X POST \
-  -F "file=@your_logs.json" \
-  http://localhost:8000/api/upload
-```
-
-### 2. Supported Log Formats
-
-**JSON Format:**
-```json
-[
-  {
-    "timestamp": "2024-05-15T12:34:56Z",
-    "source_ip": "192.168.1.100",
-    "request_path": "/api/v1/login",
-    "http_method": "POST",
-    "http_status": 200,
-    "user_agent": "MobileApp/1.0",
-    "payload_size": 256,
-    "response_time_ms": 125
-  },
-  ...
-]
-```
-
-**Text/Nginx Format:**
-```
-192.168.1.100 - - [15/May/2024:12:34:56] "POST /api/v1/login HTTP/1.1" 200 256
-```
-
-### 3. View Results
-
-Access the dashboard at http://localhost:3000 to:
-- View detected anomalies in real-time
-- Inspect individual alerts with forensic details
-- Analyze anomaly scores over time
-- Configure detection thresholds
-- Export alert history as CSV
-
-### 4. Configure Detection Settings
-
-**Via REST API:**
-```bash
-# Get current settings
-curl http://localhost:8000/api/settings
-
-# Update threshold
-curl -X POST http://localhost:8000/api/settings \
-  -H "Content-Type: application/json" \
-  -d '{"threshold": 0.75, "contamination": 0.01}'
-```
-
-### 5. Export Results
-
-**CSV Export:**
-```bash
-curl http://localhost:8000/api/alerts/export \
-  --output alerts.csv
-```
-
-## Algorithm Details
-
-### Isolation Forest Anomaly Detection
-
-The platform uses the Isolation Forest algorithm, which detects anomalies by isolating outliers in a random forest of binary trees.
-
-**Anomaly Score Formula:**
-```
-s(x, n) = 2^(-E(h(x))/c(n))
-```
-
-Where:
-- `E(h(x))` = average path length of sample x in the trees
-- `c(n)` = average path length in a Binary Search Tree
-- Scores close to 1 indicate anomalies
-- Scores close to 0 indicate normal behavior
-
-**Configuration:**
-- `n_estimators`: 100 (number of trees)
-- `contamination`: 0.01 (expected anomaly rate)
-- `threshold`: Dynamic (adjusted based on score distribution)
-
-### Feature Extraction
-
-The system extracts 6 core dimensions from API logs:
-
-| Feature | Description | Type |
-|---------|-------------|------|
-| Source IP | Geo-IP categorized | Categorical |
-| Request Path | Entropy-analyzed for injection detection | Categorical |
-| User Agent | Distinguishes legitimate SDKs vs. headless browsers | Categorical |
-| Response Status | Aggregated into HTTP code families (2xx/3xx/4xx/5xx) | Categorical |
-| Payload Size | Identifies data exfiltration | Numerical |
-| Inter-Arrival Time | Time between sequential requests from same session | Numerical |
-
-## Evaluation
-
-### Datasets
-
-**Synthetic Dataset:**
-- 1,000,000 API calls
-- 5% injected anomalies (brute-force, data scraping, injection attacks)
-- Realistic traffic patterns
-
-**Real-World Dataset:**
-- 250,000 API calls
-- Collected from production mobile application
-- 7-day observation period
-
-### Results
-
-| Metric | Synthetic | Real-World |
-|--------|-----------|-----------|
-| Precision | 0.94 | 0.90 |
-| Recall | 0.93 | 0.88 |
-| F1-Score | 0.94 | 0.89 |
-| Avg. Latency | 120 ms | 150 ms |
-
-**Interpretation:**
-- High precision (94%) indicates low false positive rate
-- Strong recall (93%) ensures most anomalies are detected
-- Sub-second latency suitable for real-time alerts
-- Real-world performance slightly lower due to natural data complexity
-
-## Architecture
-
-### Three-Tier Design
-
-```
-┌─────────────────────────┐
-│  Visualization Layer    │
-│  (React Dashboard)      │
-│  (WebSocket Real-time)  │
-│  (SQLite Audit Trail)   │
-└────────────┬────────────┘
-             │
-┌────────────▼────────────┐
-│  Analytical Core        │
-│  (Feature Extraction)   │
-│  (Isolation Forest)     │
-│  (Background Tasks)     │
-└────────────┬────────────┘
-             │
-┌────────────▼────────────┐
-│  Data Ingestion Layer   │
-│  (FastAPI Gateway)      │
-│  (Log Normalization)    │
-│  (Async Processing)     │
-└─────────────────────────┘
-```
-
-### Technology Stack
-
-- **Backend**: Python 3.9+, FastAPI, SQLAlchemy, scikit-learn
-- **Frontend**: React 18+, TypeScript, Tailwind CSS, Recharts
-- **Database**: SQLite (development), PostgreSQL (production-ready)
-- **ML**: scikit-learn 1.3+
-- **DevOps**: Docker, Docker Compose
-
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file in the project root:
-
-```bash
-# Database
-DATABASE_URL=sqlite:///./alerts.db
-# Or for PostgreSQL: DATABASE_URL=postgresql://user:password@localhost/api_detector
-
-# FastAPI
-FASTAPI_ENV=development
-FASTAPI_DEBUG=true
-FASTAPI_WORKERS=4
-
-# Alert Configuration
-ALERT_EMAIL_ENABLED=true
-ALERT_EMAIL_SMTP_SERVER=smtp.gmail.com
-ALERT_EMAIL_SMTP_PORT=587
-ALERT_EMAIL_FROM=noreply@example.com
-ALERT_EMAIL_PASSWORD=your_password
-
-WEBHOOK_URL=https://your-webhook-endpoint.com/alerts
-
-# ML Configuration
-ML_N_ESTIMATORS=100
-ML_CONTAMINATION=0.01
-ML_THRESHOLD=0.7
-
-# Security
-API_KEY=your-secret-key-here
-CORS_ORIGINS=["http://localhost:3000"]
-```
-
-### Advanced Configuration
-
-**config.yaml** (for threshold tuning):
-```yaml
-detection:
-  algorithm: isolation_forest
-  n_estimators: 100
-  contamination: 0.01
-  threshold_auto_adjust: true
-  
-features:
-  - source_ip
-  - request_path
-  - user_agent
-  - response_status
-  - payload_size
-  - inter_arrival_time
-
-alerts:
-  enabled: true
-  email_recipients:
-    - security-team@company.com
-  slack_webhook: https://hooks.slack.com/...
-  
-logging:
-  level: INFO
-  file: logs/detector.log
-```
-
-## API Endpoints
-
-### Upload and Analysis
-
-**POST /api/upload**
-```bash
-curl -X POST -F "file=@logs.json" http://localhost:8000/api/upload
-```
-
-Response:
-```json
-{
-  "job_id": "uuid-string",
-  "status": "processing",
-  "message": "Logs uploaded successfully"
-}
-```
-
-### Get Alerts
-
-**GET /api/alerts**
-```bash
-curl http://localhost:8000/api/alerts?limit=10&offset=0
-```
-
-### Get Alert Details
-
-**GET /api/alerts/{alert_id}**
-```bash
-curl http://localhost:8000/api/alerts/550e8400-e29b-41d4-a716-446655440000
-```
-
-### Settings Management
-
-**GET /api/settings**
-```bash
-curl http://localhost:8000/api/settings
-```
-
-**POST /api/settings**
-```bash
-curl -X POST -H "Content-Type: application/json" \
-  -d '{"threshold": 0.75, "contamination": 0.01}' \
-  http://localhost:8000/api/settings
-```
-
-### Export Results
-
-**GET /api/alerts/export**
-```bash
-curl http://localhost:8000/api/alerts/export > alerts.csv
-```
-
-## Testing
-
-### Unit Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=src
-
-# Run specific test file
-pytest tests/test_detection.py -v
-```
-
-### Integration Tests
-
-```bash
-# Test with sample dataset
-python tests/integration_test.py --dataset data/sample_logs.json
-```
-
-### Load Testing
-
-```bash
-# Using Apache Bench
-ab -n 1000 -c 10 http://localhost:8000/api/health
-
-# Using wrk
-wrk -t4 -c100 -d30s http://localhost:8000/api/alerts
-```
-
-## Data Privacy and Security
-
-- ✅ Sensitive data (tokens, API keys) automatically redacted from logs during ingestion
-- ✅ SQLite database protected via filesystem permissions
-- ✅ Alert logs signed for non-repudiation
-- ✅ API endpoints protected via Bearer token authentication
-- ✅ HTTPS support for production deployments
-- ✅ CORS restrictions configurable
-
-## Limitations
-
-1. **Temporal Modeling**: Isolation Forest doesn't capture sequence patterns; slow attacks spanning hours may be missed. Future versions will integrate LSTM-based detectors.
-
-2. **Scalability**: SQLite limits throughput to ~10,000 requests/second. PostgreSQL or time-series databases (InfluxDB, TimescaleDB) recommended for production deployments handling millions of daily API calls.
-
-3. **Integration**: Native connectors for Elastic, Splunk, and other SIEM platforms planned for v1.1+.
-
-## Future Roadmap
-
-- **v1.1 (Q3 2024)**:
-  - PostgreSQL support
-  - SIEM connectors (Elasticsearch, Splunk)
-  - Explainable AI (SHAP integration)
-
-- **v1.2 (Q4 2024)**:
-  - LSTM-based temporal anomaly detection
-  - Kubernetes deployment examples
-  - Mobile SDK (Android/iOS)
-
-- **v2.0 (2025)**:
-  - Distributed architecture with Apache Kafka
-  - Advanced fuzzy logic for uncertainty handling
-  - Custom anomaly detection rules DSL
-
-## Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
-
-## Citation
-
-If you use Mobile API Misuse Detector in your research, please cite:
-
-```bibtex
-@article{menacera2024mobile,
-  title={Mobile API Misuse Detector: An Active-Security Platform for Detecting API Abuse in Mobile Applications},
-  author={Menacera, Kaoutar and Laafar, Ayoub},
-  journal={SoftwareX},
-  year={2024},
-  doi={10.1016/j.softx.2024.XXXXX},
-  url={https://github.com/kaoutar/mobile-api-misuse-detector}
-}
-```
-
-## Support
-
-For issues, questions, or suggestions:
-- 📧 Email: ayoub.laafar@ucd.ac.ma
-- 🐛 GitHub Issues: https://github.com/kaoutar/mobile-api-misuse-detector/issues
-- 📖 Documentation: https://github.com/kaoutar/mobile-api-misuse-detector/wiki
-
-## Acknowledgments
-
-- scikit-learn team for the Isolation Forest implementation
-- FastAPI framework developers
-- React community
-- Security team at partner mobile application provider
+</div>
 
 ---
 
-**Current Version:** v1.0.0  
-**Last Updated:** 2024-05-16  
-**Status:** Production Ready ✅
+## 📋 Table des matières
+
+- [📁 Structure du projet](#-structure-du-projet)
+- [⚙️ Prérequis](#️-prérequis)
+- [🚀 Installation & Lancement](#-installation--lancement)
+- [✨ Fonctionnalités](#-fonctionnalités)
+- [🤖 Moteur IA](#-moteur-ia)
+- [📊 Benchmark — Baseline vs Notre Système](#-benchmark--baseline-vs-notre-système)
+- [📸 Interface & Démo](#-interface--démo)
+- [🛑 Arrêt propre](#-arrêt-propre)
+- [👥 Auteurs](#-auteurs)
+
+---
+
+## 📁 Structure du projet
+
+```text
+mobile-api-misuse-detector/
+├── backend/
+│   ├── main.py                 # API FastAPI (Ingestion, WebSockets)
+│   ├── advanced_analytics.py   # Isolation Forest & Profilage
+│   ├── clustering.py           # Clustering comportemental
+│   ├── benchmark.py            # Moteur de benchmark vs Fail2ban
+│   └── parser.py               # Parsers pour logs Nginx, Express, Spring
+├── frontend/
+│   └── src/                    # Dashboard React temps réel
+├── docker-compose.yml          # Déploiement multi-conteneurs
+├── report.tex                  # Rapport académique (SoftwareX)
+└── README.md                   # Documentation du projet
+```
+
+---
+
+## ⚙️ Prérequis
+
+- **Docker** et **Docker Compose** installés sur votre machine (méthode recommandée).
+- Ou environnement local avec **Python 3.9+** et **Node.js 18+**.
+- Ports `8000` (Backend) et `5173` (Frontend) disponibles.
+
+---
+
+## 🚀 Installation & Lancement
+
+Le projet est entièrement conteneurisé via Docker pour une mise en route rapide.
+
+### 1. Cloner le projet
+```bash
+git clone https://github.com/Ayoublaa/mobile.git
+cd mobile
+```
+
+### 2. Configurer les variables d'environnement (Optionnel)
+Pour activer les alertes de sécurité par email, créez un fichier `.env` dans le dossier `backend/` :
+```env
+SMTP_USERNAME=votre-email@gmail.com
+SMTP_PASSWORD=votre-mot-de-passe-app
+EMAIL_FROM=votre-email@gmail.com
+EMAIL_TO=admin@example.com
+```
+
+### 3. Lancer avec Docker Compose
+À la racine du projet, exécutez :
+```bash
+docker compose up --build -d
+```
+
+- **Dashboard UI :** [http://localhost:5173](http://localhost:5173)
+- **API Swagger :** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+## ✨ Fonctionnalités
+
+| Fonctionnalité | Description |
+|----------------|-------------|
+| **Ingestion Multi-Format** | Support natif des logs Nginx, Express, et Spring via upload drag-and-drop. |
+| **Détection Zéro-Jour** | Utilisation d'Isolation Forest pour repérer les anomalies hors-normes sans règles prédéfinies. |
+| **Alertes Actives** | Envoi automatique d'emails en cas de détection critique (configurable via le dashboard). |
+| **Clustering Comportemental**| Regroupement des IPs suspectes pour identifier les types d'attaques (Scanners, Brute-force). |
+| **Recommandations IA** | Propositions d'actions de remédiation générées dynamiquement selon le profil de l'attaque. |
+
+---
+
+## 🤖 Moteur IA
+
+Le moteur d'intelligence artificielle de notre plateforme repose sur une architecture hybride :
+
+| Algorithme | Rôle |
+|------------|------|
+| **Isolation Forest** | Algorithme de Machine Learning non supervisé qui isole les anomalies (outliers) pour repérer les pics de requêtes et les comportements furtifs. |
+| **Clustering Comportemental** | Segmentation des attaquants en profils comportementaux basés sur le taux d'erreur 401, les endpoints touchés, le volume, et l'usage mobile. |
+| **Analyse Heuristique** | Analyse ciblée pour la détection formelle de spikes et d'énumération de routes d'API. |
+
+---
+
+## 📊 Benchmark — Baseline vs Notre Système
+
+Le projet intègre un moteur d'évaluation (accessible via l'endpoint `GET /benchmark`) qui simule divers scénarios d'attaques (Bruteforce, Énumération, Flood 500, trafic légitime) et compare les performances de notre système d'IA à une approche classique par seuils statiques (de type Fail2ban).
+
+**Avantages de notre système :**
+- **Precision nettement supérieure** (réduction des faux positifs sur les adresses IP partagées/NAT).
+- **Meilleur Recall** (détection des attaques "Low-and-Slow" ou furtives qui passent sous le radar des limites de requêtes standards).
+- **F1-Score optimisé** grâce à la flexibilité de l'apprentissage automatique qui s'adapte à l'évolution du trafic.
+
+---
+
+## 📸 Interface & Démo
+
+**1. Dashboard Principal**  
+*Vue d'ensemble en temps réel de la sécurité et des métriques du système.*
+<img src="scrennshot/dashboard.png" width="100%" alt="Dashboard Overview" />
+
+<br/>
+
+**2. Analyse Visuelle (Heatmaps & Timeline)**  
+*Visualisation approfondie des comportements suspects.*
+<img src="scrennshot/graphs.png" width="100%" alt="Anomaly Analytics" />
+
+<br/>
+
+**3. Journal des Alertes et Emails**  
+*Traçabilité complète et notifications instantanées pour les menaces critiques.*
+<br/>
+<img src="scrennshot/jouranldaletre.png" width="49%" alt="Alert Journal" /> <img src="scrennshot/email.png" width="49%" alt="Email Notifications" />
+
+---
+
+## 🛑 Arrêt propre
+
+Pour arrêter proprement les services Docker :
+
+```bash
+# Arrêter les conteneurs
+docker compose down
+
+# Arrêter les conteneurs et supprimer les volumes (historique)
+docker compose down -v
+```
+
+---
+
+## 👥 Auteurs
+
+Ce projet a été développé en tant que solution complète et moderne de cybersécurité.
+
+- **Kaoutar Menacera**
+- **Ayoub Laafar**
+
+📄 *Un rapport de recherche académique complet de 14 pages (format SoftwareX) détaillant l'approche méthodologique et l'implémentation est disponible dans le fichier `report.tex`.*
