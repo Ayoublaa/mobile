@@ -18,6 +18,16 @@
 
 ---
 
+## 🎯 Points d'Évaluation (Pour le Professeur)
+
+Afin de faciliter l'évaluation, voici les accès rapides aux 4 exigences principales du projet :
+1. **[🎥 Vidéo de Démonstration](#-démonstration-vidéo)** : Scénario complet d'attaque, analyse et alertes.
+2. **[🐳 Docker Compose](#-docker-compose--installation--lancement)** : Fichier `docker-compose.yml` prêt à l'emploi pour lancer le Backend et le Frontend.
+3. **[📱 Analyse du Manifest Android](#-moteur-ia--analyse-du-manifest)** : Parsing dynamique des fichiers `AndroidManifest.xml` (permissions, composants exportés).
+4. **[📊 Métriques des Modèles IA](#-métriques-des-modèles-ia--benchmark)** : Évaluation de la Précision, du Recall et du F1-Score via notre moteur de benchmark interne.
+
+---
+
 ## 📋 Table des matières
 
 - [📁 Structure du projet](#-structure-du-projet)
